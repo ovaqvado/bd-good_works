@@ -1,11 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { List } from './entities/list.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ListService {
-  create(createListDto: CreateListDto) {
-    return 'This action adds a new list';
+  constructor(
+    @InjectRepository(List)
+    private readonly listRepository: Repository<List>,
+  ) {}
+  async create(createListDto: CreateListDto, id: number) {
+    const newList = {
+      text: createListDto.text,
+      user: { id },
+    };
+    if (!newList) throw new BadRequestException('Something went wrong...');
+    return await this.listRepository.save(newList);
   }
 
   findAll() {
