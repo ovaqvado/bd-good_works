@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { List } from './entities/list.entity';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ListService {
@@ -12,11 +12,18 @@ export class ListService {
     private readonly listRepository: Repository<List>,
   ) {}
   async create(createListDto: CreateListDto, id: number) {
+    const isExist = await this.listRepository.findBy({
+      user: { id },
+      text: createListDto.text,
+    });
+    if (isExist.length) throw new BadRequestException('List already exist');
+
     const newList = {
       text: createListDto.text,
-      user: { id },
+      user: {
+        id,
+      },
     };
-    if (!newList) throw new BadRequestException('Something went wrong...');
     return await this.listRepository.save(newList);
   }
 

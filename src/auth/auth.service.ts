@@ -17,11 +17,12 @@ export class AuthService {
     if (user && passwordIsMatch) {
       return user;
     }
-    throw new BadRequestException('User or password are incorrect!');
+    throw new BadRequestException('Email or password are incorrect!');
   }
   async login(user: IUser) {
-    const { id, email } = user;
+    const { email, id } = user;
     return {
+      name: '@' + user.name,
       id,
       email,
       token: this.jwtService.sign({ id: user.id, email: user.email }),

@@ -6,22 +6,19 @@ import {
   Patch,
   Param,
   Delete,
-  UsePipes,
-  ValidationPipe,
-  UseGuards,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { ListService } from './list.service';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
-@Controller('list')
+@Controller('lists')
 export class ListController {
   constructor(private readonly listService: ListService) {}
 
   @Post()
-  @UsePipes(new ValidationPipe())
   @UseGuards(JwtAuthGuard)
   create(@Body() createListDto: CreateListDto, @Req() req) {
     return this.listService.create(createListDto, +req.user.id);

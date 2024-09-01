@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  // Param,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -24,9 +23,4 @@ export class UserController {
   findAll() {
     return this.userService.findAll();
   }
-
-  // @Get()
-  // async findOne(@Query('id', ParseIntPipe) id: number) {
-  //   return this.userService.findOne(id);
-  // }
 }
