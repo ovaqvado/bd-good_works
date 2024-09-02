@@ -14,7 +14,7 @@ import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
-@Controller('lists')
+@Controller('list')
 export class ListController {
   constructor(private readonly listService: ListService) {}
 
