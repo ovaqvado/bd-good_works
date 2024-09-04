@@ -2,26 +2,27 @@ import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
+  Entity,
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
+@Entity()
 export class List {
-  @PrimaryGeneratedColumn({ name: 'list_id' })
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   text: string;
 
-  @OneToOne(() => User, (user) => user.lists)
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn()
+  @OneToOne(() => User, (user) => user.list)
   user: User;
-
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
-  updateAt: Date;
+  updatedAt: Date;
 }

@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
 import { List } from './entities/list.entity';
@@ -27,19 +31,40 @@ export class ListService {
     return await this.listRepository.save(newList);
   }
 
-  findAll() {
-    return `This action returns all list`;
+  async findAll(id: number) {
+    return await this.listRepository.find({
+      where: {
+        user: { id },
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} list`;
+  async findOne(id: number) {
+    const isExist = await this.listRepository.findOne({
+      where: { id },
+      relations: { user: true },
+    });
+
+    if (!isExist) throw new NotFoundException('List not found');
+    return isExist;
+
+    return;
   }
 
-  update(id: number, updateListDto: UpdateListDto) {
-    return `This action updates a #${id} list`;
+  async update(id: number, updateListDto: UpdateListDto) {
+    const list = await this.listRepository.findOne({
+      where: { id },
+    });
+    if (!list) throw new NotFoundException('list not found');
+    return await this.listRepository.update(id, updateListDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} list`;
+  async remove(id: number) {
+    const list = await this.listRepository.findOne({
+      where: { id },
+    });
+    if (!list) throw new NotFoundException('list not found');
+
+    return await this.listRepository.delete(id);
   }
 }

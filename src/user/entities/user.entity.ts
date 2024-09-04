@@ -1,30 +1,28 @@
 import { List } from 'src/list/entities/list.entity';
 import {
+  Entity,
+  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  Entity,
-  OneToOne,
-  PrimaryGeneratedColumn,
   UpdateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
-
+  @Column()
+  email: string;
+  @Column()
+  password: string;
   @Column()
   username: string;
 
-  @Column()
-  email: string;
-
-  @Column()
-  password: string;
-
+  @JoinColumn()
   @OneToOne(() => List, (list) => list.user)
-  lists: List;
-
+  list: List;
   @CreateDateColumn()
   createdAt: Date;
 
